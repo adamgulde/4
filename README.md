@@ -1,4 +1,1 @@
-# webscraper
-Webscraper for one-shot face detection project
-
-Temporary repository. Will be moved into official one-shot face detection repos later
+Entire project 4 repository, including webscraper, one-shot AI, and database communication.
