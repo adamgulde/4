@@ -7,14 +7,32 @@ Added readme for my own sanity...
         From commands.txt file, it reads 'start' then begins iterating through the commands to distribute
         Creates worker threads and accepts 1 connection per thread
         Sends command URL to worker connection
-        TODO: close connection... close thread...
-        TODO: Query when database is full... how???
+
     client.py
         Create client socket, connect to server socket
-        Receive command URL        
-        
-
-
+        Receive command URL
+        Begin webscraping -> find_users.py
+    find_users.py
+        Initialize webscraping client with user credentials
+        TODO: create user credentials list (SENSITIVE DATA)...
+        Begin webscraping with client_main function
+        Create user ID list
+        Webscraping loop, appending 0 and 1 to nonexisting and existing users, respectively 
+        Create Pinged Profiles csv file
+        Return csv file
+        Close find_users.py
+    client.py
+        TODO: prune csv file from client.py...
+        TODO: export remaining (positive) ids into 'data'...
+        TODO: run uploader.js...
+    uploader.js
+        For each entry in 'data', upload to database
+        Close
+    client.py
+        TODO: Close...
+    server.py
+        TODO: close connection... close thread...
+        TODO: Query when database is full... how???
 
 
 
