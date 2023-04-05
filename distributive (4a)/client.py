@@ -1,6 +1,7 @@
 import socket
 import time
 import os
+import prune
 
 def webscrape(ids):
     import find_users
@@ -48,26 +49,11 @@ def webscrape(ids):
 #         print('\n[CLIENT] Client waiting for new command...')
 #         time.sleep(1)
         
-def upload_2_DB():
-    import pyodbc 
-
-    server = 'sql9.freesqldatabase.com,3306' 
-    database = 'sql9609574' 
-    username = 'sql9609574' 
-    password = 'U6JqdflMxh'
-
-    conn = pyodbc.connect('Driver={SQL Server};'
-                        f'Server={server};'
-                        f'Database={database};'
-                        'ENCRYPT=yes;'
-                        f'UID={username};'
-                        f'PWD={password}')
-
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM table_name')
-
-    for i in cursor:
-        print(i)
+def sendToData(positiveIDs):
+    file = open('data', 'w')
+    for id in positiveIDs:
+        file.write(id+'\n')
+    file.close()
 
 
 def get_command():
@@ -82,8 +68,13 @@ def main():
     # upload_2_DB()
     ids = get_command()
     filename = webscrape(ids)
-    send_data(filename)
+    posIDs = prune.prune('distributive (4a)/'+filename)
+    sendToData(posIDs)
     print('\n[CLIENT] Client script completed!')
 
 if __name__=="__main__":
-    main()
+    ## main()
+    filename = 'Pinged Schoology Profiles at 84082862 to 84082870.csv'
+    posIDs = prune.prune('distributive (4a)/'+filename)
+    sendToData(posIDs)
+    print('\n[CLIENT] Client script completed!')

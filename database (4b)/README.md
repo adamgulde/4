@@ -1,6 +1,6 @@
 Adding a readme for my own sanity
 
-4d. interacts with the database as the following:
+4b. (formerly 4d.) interacts with the database as the following:
     server.js:
         Connect to DB
         Get wix image DL URL
