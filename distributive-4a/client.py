@@ -22,6 +22,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementNotInteractableException
 import time as time
 import os
+import socket
 
 def client_initialize(s_id, e_id):
     print("Data is not stored after code execution.")
@@ -107,14 +108,18 @@ def webscrape(ids):
     positive_ids = client_main(init_vals[0], init_vals[1], init_vals[2])
     print("[CLIENT] Finished finding users!\n\n")
     return positive_ids
+ip = 'localhost'
 
 def sendToServer(positiveIDs):
-    file = open('data', 'w')
-    for id in positiveIDs:
-        file.write(id+'\n')
-    file.close()
+    # file = open('data', 'w')
+    # for id in positiveIDs:
+    #     file.write(id+'\n')
+    # file.close()
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client_socket.connect((ip, 3131))
+    # client_socket.send('0'.encode())
+    client_socket.sendmsg(positiveIDs)
 
-import socket
 def get_command():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     ip = input('Enter IPv4 Address of Master: ')
@@ -132,7 +137,7 @@ def main():
     ids = get_command()
     posIDS = webscrape(ids)
     # posIDs = prune('distributive-4a/'+filename)
-    sendToData(posIDs)
+    sendToServer(posIDS)
     os.remove('distributive-4a\Pinged Schoology Profiles at 84083000 to 84084000.csv')
     import webbrowser
     webbrowser.open('https://youtu.be/G1IbRujko-A')
