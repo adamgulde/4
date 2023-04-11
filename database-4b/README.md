@@ -1,6 +1,21 @@
 Adding a readme for my own sanity
 
 4b. (formerly 4d.) interacts with the database as the following:
+Step 1: Local computer acts as CLIENT with respect to the database
+    client.js
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+Step 2: Local computer acts as SERVER with respect to the database
     server.js:
         Connect to DB
         Get wix image DL URL

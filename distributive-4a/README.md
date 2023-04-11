@@ -33,7 +33,9 @@ Added readme for my own sanity...
     server.py
         TODO: close connection... close thread...
         TODO: Query when database is full... how???
-    
+    Crash client.py
+    Crash server.py
+
 
 
 

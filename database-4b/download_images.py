@@ -4,27 +4,36 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
-import time as time
+from selenium.common.exceptions import ElementNotInteractableException
+import time
 import os
 directory = ''
-def config():
-    start_url = input('Where do you want to start? PASS for all users.')
-    import time
-    driver = webdriver.Chrome()#executable_path="C:/selenium/chromedriver.exe")
-    driver.get("")
+def config(credentials:tuple):
+    from sys import platform
+    if(platform=='win32'):
+        driver = webdriver.Chrome(executable_path='distributive-4a\drivers\chromedriver.exe')
+    else:
+        driver = webdriver.Chrome(executable_path='distributive-4a\drivers\chromedriver')  
+    driver.get("https://bishopmoore.schoology.com/")
     input_box = driver.find_element(By.ID, value="identifierId")
-    input_box.send_keys("", Keys.ENTER)
+    input_box.send_keys(credentials[0], Keys.ENTER)
     time.sleep(1)
     input_box = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.NAME, "password"))
     )
-    input_box.send_keys("", Keys.ENTER)
-    time.sleep(4)
-    return driver, start_url
+    i = 0
+    while driver.current_url != 'https://bishopmoore.schoology.com/home':
+        try:  
+            input_box.send_keys(credentials[1], Keys.ENTER)
+            time.sleep(1)
+            i+=1
+        except ElementNotInteractableException:
+            print(f"An error occured, retrying...({i})")
+            time.sleep(3)
+    return driver
 
 def get_data(start_url:str):
     users = []
-    files = os.listdir(directory)
     for file in files:
         if file.startswith("Users Downloaded at"):
             with open(os.path.join(directory,file), 'r') as f:

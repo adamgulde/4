@@ -3,7 +3,7 @@ from os import remove
   
 
 IMG_NAME = 'img.jpg'
-url = open("data", "r").read()
+url = open("database-4b\data", "r").read()
   
 data = requests.get(url).content
   
@@ -21,9 +21,9 @@ detected_face = "Test Adam"
 
 ### END AI BLOCK
 
-remove(IMG_NAME) ## deletes downloaded file
+## remove(IMG_NAME) ## deletes downloaded file
 
 ## Creates response file for uploading response to DB
-f = open("response", "w")
+f = open("database-4b\\response", "w")
 f.write(f"This looks like {detected_face}, with a confidence level of {confidence_lvl}%")
 f.close()

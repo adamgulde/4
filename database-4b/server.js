@@ -52,13 +52,13 @@ function sleep(ms) {
 
 const imageURL = await getImageURL(pool)
 
-fs.writeFile("data", imageURL, await function(err) {
+fs.writeFile("database-4b/data", imageURL, await function(err) {
     if(err) {
         return console.log(err);
     }
     console.log("Image URL exported for Python use!")    
-    while (!fs.existsSync('response')) { // wait for python to create 'response file'
+    while (!fs.existsSync('database-4b/response')) { // wait for python to create 'response file'
         sleep(1000);
     }
-    insertIntoDB(pool, "ServerReturn", fs.readFileSync("response").toString('utf-8'));
+    insertIntoDB(pool, "ServerReturn", fs.readFileSync("database-4b/response").toString('utf-8'));
 }); 
