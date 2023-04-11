@@ -1,14 +1,14 @@
 ### 
 ### Important functions: 
 ###
-import pandas as pd
-def prune(filename):
-    pruned_array = []
-    csv_df = pd.read_csv(filename)
-    for entry in csv_df.itertuples():
-        if entry[2] == 1:
-            pruned_array.append(str(entry[1]).removesuffix('/info').removeprefix('https://bishopmoore.schoology.com/user/'))
-    return pruned_array
+# import pandas as pd
+# def prune(filename):
+#     pruned_array = []
+#     csv_df = pd.read_csv(filename)
+#     for entry in csv_df.itertuples():
+#         if entry[2] == 1:
+#             pruned_array.append(str(entry[1]).removesuffix('/info').removeprefix('https://bishopmoore.schoology.com/user/'))
+#     return pruned_array
 
 ### Brute force program to iterate through given Schoology user ids and log
 ### real users into a csv file.
@@ -68,15 +68,15 @@ def get_positive_user_id(driver :webdriver, url_list :list):
             wait.until(EC.title_contains("|"))
             user_exists.append(1) 
         except TimeoutException:
-            user_exists.append(0)
+            ## user_exists.append(0)
             print("Unavailable user at: ", user)
     driver.quit()        
 
-def consolidate_data(start_id:int, end_id:int):
-    data_df = pd.Series(user_exists, user_list)
-    filename = f"Pinged Schoology Profiles at {start_id} to {end_id}.csv"
-    data_df.to_csv('distributive-4a/'+filename)
-    return filename
+# def consolidate_data(start_id:int, end_id:int):
+#     data_df = pd.Series(user_exists, user_list)
+#     filename = f"Pinged Schoology Profiles at {start_id} to {end_id}.csv"
+#     data_df.to_csv('distributive-4a/'+filename)
+#     return filename
 
 def client_main(cred, start_id, end_id):
     input(f"Press ENTER to iterate through {end_id-start_id} users...")
@@ -87,7 +87,7 @@ def client_main(cred, start_id, end_id):
     end_time = time.time()
     efficiency = round((end_id-start_id)/(end_time-start_time), 3)
     print(f"Total time iterating: {(int(end_time-start_time))//60}m:{(int(end_time-start_time))%60}s\nTotal URLS iterated: {end_id-start_id}\nAverage runtime efficiency: {efficiency} users/sec")
-    return consolidate_data(start_id, end_id)
+    return user_exists
 
 
 def webscrape(ids):
@@ -104,11 +104,11 @@ def webscrape(ids):
             next = True
     print(id1, id2)
     init_vals = client_initialize(int(id1), int(id2))
-    f = client_main(init_vals[0], init_vals[1], init_vals[2])
+    positive_ids = client_main(init_vals[0], init_vals[1], init_vals[2])
     print("[CLIENT] Finished finding users!\n\n")
-    return f
+    return positive_ids
 
-def sendToData(positiveIDs):
+def sendToServer(positiveIDs):
     file = open('data', 'w')
     for id in positiveIDs:
         file.write(id+'\n')
@@ -130,8 +130,8 @@ def get_command():
 
 def main():
     ids = get_command()
-    filename = webscrape(ids)
-    posIDs = prune('distributive-4a/'+filename)
+    posIDS = webscrape(ids)
+    # posIDs = prune('distributive-4a/'+filename)
     sendToData(posIDs)
     os.remove('distributive-4a\Pinged Schoology Profiles at 84083000 to 84084000.csv')
     import webbrowser
