@@ -1,5 +1,22 @@
 Added readme for my own sanity...
 
+
+Run this in terminal: 
+
+xattr -d com.apple.quarantine chromedriver
+
+May need to update chromedriver: 
+download is available at https://chromedriver.chromium.org/downloads
+
+May need to update chrome: 
+Chrome settings => About Chrome => should automatically update
+
+(CLIENT) PYTHON DEPENDENCIES
+pip install selenium
+pip install pandas
+
+
+
 4a is supposed to do quite a few things, starting at server.py
 
     server.py
@@ -42,19 +59,3 @@ Added readme for my own sanity...
 
 
 
-
-
-
-[OTHER]:
-Run this in terminal: 
-
-xattr -d com.apple.quarantine chromedriver
-
-May need to update chromedriver: 
-download is available at https://chromedriver.chromium.org/downloads
-
-May need to update chrome: 
-Chrome settings => About Chrome => should automatically update
-
-Server will continue to accept connections as long as the 
-first line of cmds.txt does not read "stop" (no quotes)

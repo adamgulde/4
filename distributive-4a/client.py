@@ -117,6 +117,7 @@ def sendToData(positiveIDs):
 import socket
 def get_command():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    input('Enter IPv4 Address of Master: ')
     client_socket.connect(('192.168.1.15', 3131))
     # client_socket.send('0'.encode())
     command = client_socket.recv(20).decode()
