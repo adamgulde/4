@@ -21,7 +21,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import ElementNotInteractableException
 import time as time
-import os
 import socket
 
 def client_initialize():
@@ -39,7 +38,8 @@ def config(credentials:tuple):
     input_box = driver.find_element(By.ID, value="identifierId")
     input_box.send_keys(credentials[0], Keys.ENTER)
     time.sleep(1)
-    input_box = WebDriverWait(driver, 10).until(
+    input_box = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="password"]/div[1]/div/div[1]/input')) or 
         EC.presence_of_element_located((By.NAME, "password"))
     )
     i = 0
@@ -69,15 +69,8 @@ def get_positive_user_id(driver :webdriver, url_list :list):
             wait.until(EC.title_contains("|"))
             user_exists.append(1) 
         except TimeoutException:
-            ## user_exists.append(0)
             print("Unavailable user at: ", user)
     driver.quit()        
-
-# def consolidate_data(start_id:int, end_id:int):
-#     data_df = pd.Series(user_exists, user_list)
-#     filename = f"Pinged Schoology Profiles at {start_id} to {end_id}.csv"
-#     data_df.to_csv('distributive-4a/'+filename)
-#     return filename
 
 def client_main(cred, start_id, end_id):
     input(f"Press ENTER to iterate through {end_id-start_id} users...")
@@ -108,7 +101,6 @@ def webscrape(ids):
     positive_ids = client_main(creds, int(ids[0]), ids[1])
     print("[CLIENT] Finished finding users!\n\n")
     return positive_ids
-ip = 'localhost'
 
 def sendToServer(positiveIDs:str):
     # file = open('data', 'w')
@@ -116,20 +108,20 @@ def sendToServer(positiveIDs:str):
     #     file.write(id+'\n')
     # file.close()
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((ip, 3132))
+    client_socket.connect((ip, port))
     
     client_socket.send(positiveIDs.encode())
 
 
 def get_command():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    ip, port = input('Enter IPv4 Address of Master: '), int(input('Enter Port #'))
     client_socket.connect((ip, port))
     # client_socket.send('0'.encode())
     command = client_socket.recv(20).decode().strip().split(',')
     conv_cmd = int(command[0]), int(command[1])
     print('[CLIENT] Received command!')
     print(conv_cmd)
+    client_socket.close()
     return conv_cmd
 
 ###
@@ -145,5 +137,6 @@ def main():
     webbrowser.open('https://youtu.be/G1IbRujko-A')
     print('\n[CLIENT] Client script completed!') ## this never gets reached but I am so sick of javascript at this point that I do not care
 
+ip, port = input('Enter IPv4 Address of Master: '), int(input('Enter Port # '))
 if __name__=="__main__":
     main()

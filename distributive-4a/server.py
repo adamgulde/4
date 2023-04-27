@@ -14,7 +14,7 @@ def handler_receiver(client_soc:socket, client_add):
     client_soc.socket.recvmsg()
     client_soc.close()
 
-def main_master():
+def main_master(port:int):
     commands = None
     if(platform.startswith('win32')):
         with open('distributive-4a\cmds.txt', 'r') as cmd: 
@@ -29,7 +29,7 @@ def main_master():
             cmd.close()
     
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket: 
-        server_socket.bind(('', 3130))
+        server_socket.bind(('', port))
         server_socket.listen()
         print('[MASTER] Master accepting connections...')
         while(True):
@@ -51,15 +51,16 @@ def main_master():
                         print('[SERVER] Server stopped!')
                         break                
     server_socket.close()
-def main_receiver():
+def main_receiver(port:int):
     all_pids = ''
     print('[RECEIVER] Thread started!')
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as server_socket: 
-        server_socket.bind(('', 3132))
+        server_socket.bind(('', port))
         server_socket.listen()
         print('[RECEIVER] Receiver accepting connections...')
 
 if __name__ == "__main__":
-    main_master()
-    # threading.Thread(target=main_master, daemon=True).start()
-    # threading.Thread(target=main_receiver).start()
+    port = int(input('Enter port # '))
+    # main_master()
+    threading.Thread(target=main_master, args=[port]).start()
+    threading.Thread(target=main_receiver, args=[port]).start()
