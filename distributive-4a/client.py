@@ -1,15 +1,3 @@
-### 
-### Important functions: 
-###
-# import pandas as pd
-# def prune(filename):
-#     pruned_array = []
-#     csv_df = pd.read_csv(filename)
-#     for entry in csv_df.itertuples():
-#         if entry[2] == 1:
-#             pruned_array.append(str(entry[1]).removesuffix('/info').removeprefix('https://bishopmoore.schoology.com/user/'))
-#     return pruned_array
-
 ### Brute force program to iterate through given Schoology user ids and log
 ### real users into a csv file.
 
@@ -53,13 +41,6 @@ def config(credentials:tuple):
             time.sleep(3)
     return driver
 
-# user_list = []
-# def create_url_list(start_id:int, end_id:int):
-#     for id in range(end_id - start_id):
-#         base = start_id + id
-#         user_list.append(base)
-#     return user_list
-
 user_exists = []
 def get_positive_user_id(start_id:int, end_id:int, driver :webdriver):
     wait = WebDriverWait(driver, 0, poll_frequency=0.01)
@@ -75,7 +56,6 @@ def get_positive_user_id(start_id:int, end_id:int, driver :webdriver):
 def client_main(cred, start_id, end_id):
     input(f"Press ENTER to iterate through {end_id-start_id} users...")
     d = config(cred)
-    # user_list = create_url_list(start_id, end_id) # can be simplified to just use IDs.. 
     start_time = time.time()
     get_positive_user_id(start_id, end_id, d)
     end_time = time.time()
@@ -91,16 +71,9 @@ def webscrape(ids):
     return positive_ids
 
 def sendToServer(positiveIDs:str):
-    # file = open('data', 'w')
-    # for id in positiveIDs:
-    #     file.write(id+'\n')
-    # file.close()
-    
     print(positiveIDs)
     strIDs = ' '.join(str(id) for id in positiveIDs)
     print(strIDs)
-    input()
-
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((ip, port+1))
     client_socket.send(strIDs.encode())
@@ -120,8 +93,9 @@ def get_command():
 
 def main():
     ids = get_command()
-    posIDS = webscrape(ids)
-    sendToServer(posIDS)
+    # posIDS = webscrape(ids)
+    # sendToServer(posIDS)
+    sendToServer(ids)
     import webbrowser
     webbrowser.open('https://youtu.be/BBGEG21CGo0')
     print('[CLIENT] Client script completed!') 
